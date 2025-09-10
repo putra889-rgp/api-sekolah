@@ -57,7 +57,10 @@ app.get("/sekolah", (req, res) => {
 
   res.json(sekolah);
 });
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`API berjalan di http://localhost:${PORT}`);
+  });
+}
 
-app.listen(PORT, () => {
-  console.log(`API berjalan di http://localhost:${PORT}`);
-});
+module.exports = app;
