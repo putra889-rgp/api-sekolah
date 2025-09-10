@@ -1,10 +1,8 @@
-// server.js
 const express = require("express");
 const app = express();
 
-// Data sekolah lengkap
+// Data sekolah
 const sekolah = [
-  // === Kepulauan Seribu ===
   { npsn: "20104464", nama: "SD NEGERI PULAU HARAPAN 01 PG", alamat: "Pulau Harapan Rt. 04/02", desa: "Pulau Harapan", status: "Negeri" },
   { npsn: "20104466", nama: "SD NEGERI PULAU KELAPA 01 PG", alamat: "Jl. Dermaga Utama No. 3 Pulau Kelapa, RT. 007/04", desa: "Pulau Kelapa", status: "Negeri" },
   { npsn: "20104467", nama: "SD NEGERI PULAU KELAPA 02 PG", alamat: "Pulau Kelapa, RT. 002/01", desa: "Pulau Kelapa", status: "Negeri" },
@@ -77,26 +75,26 @@ const sekolah = [
   { npsn: "20500509", nama: "UPT SMP NEGERI 26 GRESIK", alamat: "", desa: "Kedunganyar", status: "Negeri" }
 ];
 
-// === ENDPOINTS ===
+// Root
 app.get("/", (req, res) => {
-  res.json({ message: "API Sekolah aktif", total: sekolah.length });
+  res.send("🚀 API Sekolah Aktif");
 });
 
-app.get("/sekolah", (req, res) => {
-  const { npsn } = req.query;
-  if (!npsn) return res.status(400).json({ error: "Masukkan ?npsn=" });
-  const s = sekolah.find((x) => x.npsn === npsn);
-  if (!s) return res.status(404).json({ error: "Sekolah tidak ditemukan" });
-  res.json(s);
+// Semua sekolah
+app.get("/api", (req, res) => {
+  res.json(sekolah);
 });
 
-app.get("/sekolah/all", (req, res) => res.json(sekolah));
+// Cari sekolah by NPSN
+app.get("/api/:npsn", (req, res) => {
+  const { npsn } = req.params;
+  const result = sekolah.find(s => s.npsn === npsn);
+  if (result) {
+    res.json(result);
+  } else {
+    res.status(404).json({ error: "Sekolah tidak ditemukan" });
+  }
+});
 
-// Untuk Vercel deploy
+// Export untuk Vercel
 module.exports = app;
-
-// Agar bisa run lokal
-if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-   }
