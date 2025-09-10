@@ -86,7 +86,7 @@ app.get("/api", (req, res) => {
 });
 
 // Cari sekolah by NPSN
-app.get("/api/:npsn", (req, res) => {
+app.get("/api/cari/:npsn", (req, res) => {
   const { npsn } = req.params;
   const result = sekolah.find(s => s.npsn === npsn);
   if (result) {
